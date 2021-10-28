@@ -1,5 +1,6 @@
 import { getAxisCanvas, GenericChartComponent } from "@react-financial-charts/core";
 import { first, last } from "@react-financial-charts/core";
+import * as PropTypes from "prop-types";
 import * as React from "react";
 
 export interface SelectedCandlestickProps {
@@ -20,6 +21,11 @@ export class SelectedCandlestick extends React.Component<SelectedCandlestickProp
         },
     };
 
+    public static contextTypes = {
+        margin: PropTypes.object.isRequired,
+        ratio: PropTypes.number.isRequired,
+    };
+
     public render() {
         return (
             <GenericChartComponent
@@ -38,7 +44,7 @@ export class SelectedCandlestick extends React.Component<SelectedCandlestickProp
         this.props.selection.clickEventInProgress = true;
     };
 
-    private readonly drawOnCanvas = (ctx: CanvasRenderingContext2D, moreProps: any) => {
+    private readonly drawOnCanvas = (ctx: any, moreProps: any) => {
         if (this.props.selection.clickEventInProgress && this.props.selection.previousCanvasImage) {
             ctx.putImageData(this.props.selection.previousCanvasImage, 0, 0);
         }
@@ -60,8 +66,10 @@ export class SelectedCandlestick extends React.Component<SelectedCandlestickProp
 
         const { background } = this.props;
         const { centerX, pointWidth } = pointer;
+        const { ratio } = this.context;
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(ratio, ratio);
 
         if (background?.fillStyle !== undefined) {
             ctx.fillStyle = background.fillStyle;
