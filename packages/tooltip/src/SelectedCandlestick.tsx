@@ -66,10 +66,15 @@ export class SelectedCandlestick extends React.Component<SelectedCandlestickProp
 
         const { background } = this.props;
         const { centerX, pointWidth } = pointer;
-        const { ratio } = this.context;
+        const { margin, ratio } = this.context;
+
+        const originX = 0.5 * ratio + margin.left;
+        const originY = 0.5 * ratio + margin.top;
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(ratio, ratio);
+
+        ctx.translate(originX, originY);
 
         if (background?.fillStyle !== undefined) {
             ctx.fillStyle = background.fillStyle;
