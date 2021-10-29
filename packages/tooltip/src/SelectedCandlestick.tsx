@@ -9,9 +9,10 @@ export interface SelectedCandlestickProps {
     };
     readonly selection: {
         selectedCandlestick: any;
-        previousCanvasImage: any;
-        clickEventInProgress: boolean;
+        previousCanvasImage?: any;
+        clickEventInProgress?: boolean;
     };
+    readonly onClick?: (selectedItem: any, event?: React.MouseEvent) => void;
 }
 
 export class SelectedCandlestick extends React.Component<SelectedCandlestickProps> {
@@ -38,6 +39,10 @@ export class SelectedCandlestick extends React.Component<SelectedCandlestickProp
     }
 
     private readonly onClick = (e: React.MouseEvent, moreProps: any) => {
+        if (this.props.onClick) {
+            this.props.onClick(moreProps.currentItem, e);
+        }
+
         this.props.selection.selectedCandlestick = moreProps.currentItem;
         // drawOnCanvas method is also fired on 'pan' event therefore need to record that a click
         // is in progress
